@@ -13,7 +13,7 @@ import ru.gb_shisheya.stargame.base.Base2DScreen;
 public class MenuScreen extends Base2DScreen {
 
     private Texture blImg;
-    private Vector2 v, realPos, finalPos;
+    private Vector2 v, realPos, finalPos, buf;
 
     public MenuScreen(Game game) {
         super(game);
@@ -29,6 +29,7 @@ public class MenuScreen extends Base2DScreen {
         v = Vector2.Zero;
         realPos = Vector2.Zero;
         finalPos = Vector2.Zero;
+        buf = Vector2.Zero;
     }
 
     @Override
@@ -41,18 +42,16 @@ public class MenuScreen extends Base2DScreen {
         super.render(delta);
         Gdx.gl.glClearColor(1, 0.4f, 0.6f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-//        realPos = finalPos;
 
-        if (v != Vector2.Zero) {
-            if (realPos.cpy().dst(finalPos) < v.cpy().scl(2f,2f).len()) {
-                realPos = finalPos;
-                v = Vector2.Zero;
-            } else {
-                realPos.add(v);
-            }
+        buf.set(realPos);
+        if (buf.dst(finalPos) < v.cpy().scl(2f, 2f).len()) {
+            realPos = finalPos;
+            v = Vector2.Zero;
+        } else {
+            realPos.add(v);
         }
 
+        batch.begin();
         batch.draw(img, 0, 0);
         batch.draw(blImg, realPos.x, realPos.y);
         batch.end();
